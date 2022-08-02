@@ -3,38 +3,53 @@ package com.rodvkf72.web.start;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="MEMBER")
 public class Member {
 	@Id
-	@Column(name = "ID")
+	@Column(name = "MEMBER_ID")
 	private String id;
 	
-	@Column(name = "NAME")
 	private String username;
 	
-	private Integer age;
-	
-	public String getId() {
-		return id;
-	}
 	public void setId(String id) {
 		this.id = id;
 	}
-	
-	public String getUsername() {
-		return username;
+	public String getId() {
+		return this.id;
 	}
+	
 	public void setUsername(String username) {
 		this.username = username;
 	}
+	public String getUsername() {
+		return this.username;
+	}
 	
-	public Integer getAge() {
-		return age;
+	@ManyToOne
+	@JoinColumn(name="TEAM_ID")
+	private Team team;
+	
+	public void setTeam(Team team) {
+		if (this.team != null) {
+			this.team.getMembers().remove(this);
+		}
+		this.team = team;
+		team.getMembers().add(this);
 	}
-	public void setAge(Integer age) {
-		this.age = age;
+	public Team getTeam() {
+		return this.team;
 	}
+	
+	public Member() {
+		
+	}
+	public Member(String id, String username) {
+		this.id = id;
+		this.username = username;
+	}
+	
 }
